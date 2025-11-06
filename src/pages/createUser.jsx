@@ -4,8 +4,8 @@ import Forms from '../components/templates/Forms';
 import { generarMensaje } from '../utils/GenerarMensaje';
 import UserService from '../services/UserService';
 
-const Login = () => {
-    const [form, setForm] = useState({ correo: "", contrasena: "" });
+const CreateUser = () => {
+    const [form, setForm] = useState({ nombre:"" ,correo: "", contrasena: "" });
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
@@ -22,9 +22,17 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const response = await UserService.login(form);
+            const usuario = {
+                "nombre": form.nombre,
+                "correo": form.correo,
+                "contrasena": form.contrasena,
+                rol: {
+                    "id": 5
+                }
+            }
+            const response = await UserService.createUser(usuario);
 
-            generarMensaje('¡Bienvenido!', 'success');
+            generarMensaje('usuario creado!', 'success');
 
             // Redirigir al dashboard
             /*setTimeout(() => {
@@ -33,7 +41,7 @@ const Login = () => {
 
         } catch (error) {
             // ERRORES
-            const msg = error.response?.data?.message || 'Error al iniciar sesión';
+            const msg = error.response?.data?.message || 'Error al crear usuario';
             generarMensaje(msg, 'error');
         } finally {
             setLoading(false);
@@ -45,7 +53,7 @@ const Login = () => {
             type: "text",
             text: [
                 {
-                    content: "Inicio de Sesión",
+                    content: "Crear usuario",
                     variant: "h1",
                     className: "text-center text-4xl font-medium mb-10 text-white",
                 }
@@ -54,6 +62,16 @@ const Login = () => {
         {
             type: "inputs",
             inputs: [
+                {
+                    type: "text",
+                    placeholder: "Nombre usuario",
+                    name: "nombre",
+                    value: form.nombre,
+                    onChange: handleChange,
+                    required: true,
+                    autoComplete: "off",
+                    className: "w-full border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500 mb-4",
+                },
                 {
                     type: "email",
                     placeholder: "Correo Electrónico",
@@ -79,7 +97,7 @@ const Login = () => {
         },
         {           
             type: "button",
-            text: "Iniciar Sesión",
+            text: "Crear usuario",
             className: "transform w-full mt-4 mb-4 rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400"
         },
         {
@@ -88,10 +106,10 @@ const Login = () => {
         {
           content: (
             <Link
-              to="/create-user"
+              to="/login"
               className="text-indigo-400 hover:text-indigo-300 underline transition"
             >
-              ¿Olvidaste tu contraseña?
+              Ya tengo un usuario
             </Link>
           ),
           variant: "p",
@@ -111,4 +129,4 @@ const Login = () => {
     );
 };
 
-export default Login;   
+export default CreateUser;   
