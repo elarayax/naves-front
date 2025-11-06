@@ -24,4 +24,5 @@ class NavesService {
         return axios.delete(`${BASE_URL}/${id}`);
     }
 }
+
 export default new NavesService();

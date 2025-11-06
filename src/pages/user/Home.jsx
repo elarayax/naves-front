@@ -20,6 +20,9 @@ const NavesList = () => {
     return (
         <div>
             <h2>Naves List</h2>
+            <div className="bg-blue-500 text-white p-10 text-center font-bold text-2xl">
+                Naves de Star Wars
+            </div>
             <table>
                 <thead>
                     <tr>
