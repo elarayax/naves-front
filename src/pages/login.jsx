@@ -24,7 +24,17 @@ const Login = () => {
         try {
             const response = await UserService.login(form);
 
-            generarMensaje('¡Bienvenido!', 'success');
+            if(response.data.rol.id == 2){
+                generarMensaje(`¡Bienvenido súper administrador! ${response.data.nombre}`, 'success');
+            }
+
+            if(response.data.rol.id == 3){
+                generarMensaje(`¡Bienvenido administrador! ${response.data.nombre}`, 'success');
+            }
+
+            if(response.data.rol.id == 5){
+                generarMensaje(`Bienvenido usuario! ${response.data.nombre}`, 'success');
+            }
 
             // Redirigir al dashboard
             /*setTimeout(() => {
@@ -83,22 +93,22 @@ const Login = () => {
             className: "transform w-full mt-4 mb-4 rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400"
         },
         {
-      type: "text",
-      text: [
-        {
-          content: (
-            <Link
-              to="/create-user"
-              className="text-indigo-400 hover:text-indigo-300 underline transition"
-            >
-              ¿Olvidaste tu contraseña?
-            </Link>
-          ),
-          variant: "p",
-          className: "text-center text-lg",
+            type: "text",
+            text: [
+                {
+                content: (
+                    <Link
+                    to="/create-user"
+                    className="text-indigo-400 hover:text-indigo-300 underline transition"
+                    >
+                    Crear usuario
+                    </Link>
+                ),
+                variant: "p",
+                className: "text-center text-lg",
+                },
+            ],
         },
-      ],
-    },
     ];
     return (
         <>
