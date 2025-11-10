@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Forms from '../components/templates/Forms';
-import { generarMensaje } from '../utils/GenerarMensaje';
-import UserService from '../services/UserService';
+import { Link, useNavigate } from "react-router-dom"; // Añadido useNavigate
+import Forms from '../../components/templates/Forms';
+import { generarMensaje } from '../../utils/GenerarMensaje';
+import UserService from '../../services/UserService';
 
 const Login = () => {
     const [form, setForm] = useState({ correo: "", contrasena: "" });
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate(); // Añadido
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,30 +24,31 @@ const Login = () => {
 
         try {
             const response = await UserService.login(form);
+            const { token, nombre, rol } = response.data;
 
-            if(response.data.rol.id == 2){
-                generarMensaje(`¡Bienvenido súper administrador! ${response.data.nombre}`, 'success');
-            }
+            // GUARDAR EN LOCALSTORAGE
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify({ nombre, rol }));
 
-            if(response.data.rol.id == 3){
-                generarMensaje(`¡Bienvenido administrador! ${response.data.nombre}`, 'success');
-            }
+            // MENSAJE DE BIENVENIDA
+            generarMensaje(`¡Bienvenido ${nombre}!`, 'success');
 
-            if(response.data.rol.id == 5){
-                generarMensaje(`Bienvenido usuario! ${response.data.nombre}`, 'success');
-            }
-
-            // Redirigir al dashboard
-            /*setTimeout(() => {
-                navigate('/dashboard');
-            }, 800);*/
+            // REDIRECCIÓN SEGÚN ROL
+            setTimeout(() => {
+                if (rol.id === 2 || rol.id === 3) {
+                    navigate('/admin/dashboard');
+                } else if (rol.id === 5) {
+                    navigate('/'); // o '/dashboard' si tienes uno
+                }
+            }, 1500);
 
         } catch (error) {
-            // ERRORES
             const msg = error.response?.data?.message || 'Error al iniciar sesión';
             generarMensaje(msg, 'error');
         } finally {
             setLoading(false);
+            // Opcional: limpiar formulario
+            setForm({ correo: "", contrasena: "" });
         }
     };
 
@@ -89,36 +91,37 @@ const Login = () => {
         },
         {           
             type: "button",
-            text: "Iniciar Sesión",
-            className: "transform w-full mt-4 mb-4 rounded-sm bg-indigo-600 py-2 font-bold duration-300 hover:bg-indigo-400"
+            text: loading ? "Iniciando..." : "Iniciar Sesión",
+            disabled: loading,
+            className: `transform w-full mt-4 mb-4 rounded-sm py-2 font-bold duration-300 
+                       ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-400'}`,
         },
         {
             type: "text",
             text: [
                 {
-                content: (
-                    <Link
-                    to="/create-user"
-                    className="text-indigo-400 hover:text-indigo-300 underline transition"
-                    >
-                    Crear usuario
-                    </Link>
-                ),
-                variant: "p",
-                className: "text-center text-lg",
+                    content: (
+                        <Link
+                            to="/create-user"
+                            className="text-indigo-400 hover:text-indigo-300 underline transition"
+                        >
+                            Crear usuario
+                        </Link>
+                    ),
+                    variant: "p",
+                    className: "text-center text-lg",
                 },
             ],
         },
     ];
+
     return (
-        <>
-            <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-orange-800 p-4">
-                <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-white/10 p-10 backdrop-blur-xl shadow-2xl">
-                    <Forms content={Login} />
-                </form>
-            </main>
-        </>
+        <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-orange-800 p-4">
+            <form onSubmit={handleSubmit} className="w-full max-w-md space-y-10 rounded-2xl bg-white/10 p-10 backdrop-blur-xl shadow-2xl">
+                <Forms content={Login} />
+            </form>
+        </main>
     );
 };
 
-export default Login;   
+export default Login;

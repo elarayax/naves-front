@@ -1,0 +1,2 @@
+mostrar arbol de datos en terminal
+tree -I 'node_modules|dist|.git|build' -a
