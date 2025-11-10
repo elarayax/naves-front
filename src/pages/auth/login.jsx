@@ -35,7 +35,7 @@ const Login = () => {
 
             // REDIRECCIÓN SEGÚN ROL
             setTimeout(() => {
-                if (rol.id === 2 || rol.id === 3) {
+                if (rol.id === 1 || rol.id === 2) {
                     navigate('/admin/dashboard');
                 } else if (rol.id === 5) {
                     navigate('/'); // o '/dashboard' si tienes uno

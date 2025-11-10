@@ -1,2 +1,11 @@
-mostrar arbol de datos en terminal
+mostrar arbol de datos en terminal (creo que solo en mac)
 tree -I 'node_modules|dist|.git|build' -a
+
+comandos git para subir (ya estando conectado al github)
+git add .
+git commit -m "lo que se hizo"
+git push origin main
+
+comandos para inicializar el proyecto
+npm install
+npm run dev
