@@ -9,3 +9,27 @@ git push origin main
 comandos para inicializar el proyecto
 npm install
 npm run dev
+
+"el jakeo"
+como sabrán, render se "duerme" a los 5 minutos despues de no tener uso, por lo mismmo hice un "jakeo"
+el sitio uptimerobot permite hacer consultas cada 5 minutos a un sitio, por lo que en el backend, 
+en este caso lo puse en naves, pero ustedes deberán hacer un controller justamente para estando, con el siguiente código
+
+@GetMapping("/health")
+public ResponseEntity<String> health() {
+    return ResponseEntity.ok("OK");
+}
+
+este justamente retorna un ok cada 5 minutos, usando el uptimerobot, lo que si deben agregar esta dependencia al pom
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+y en el application.properties
+management.endpoints.web.exposure.include=health,info
+management.endpoint.health.show-details=always
+este de abajo, justamente ya está, pero se tiene que editar con lo que está ahora
+spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration,org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration
+
+con este pequeño cambio, se puede tener el backend andando siempre sin necesidad de pagar los 7 dólares
