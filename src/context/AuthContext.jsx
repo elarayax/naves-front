@@ -1,18 +1,34 @@
-// context/AuthContext.jsx
-useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-        setUser(JSON.parse(userData));
-    }
-    setLoading(false);
-}, []);
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const login = (userData) => {
-    localStorage.setItem('user', JSON.stringify(userData));
-    setUser(userData);
-};
+const AuthContext = createContext();
 
-const logout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthProvider = ({ children }) => {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const userData = localStorage.getItem('user');
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
+        setLoading(false);
+    }, []);
+
+    const login = (userData) => {
+        localStorage.setItem('user', JSON.stringify(userData));
+        setUser(userData);
+    };
+
+    const logout = () => {
+        localStorage.removeItem('user');
+        setUser(null);
+    };
+
+    return (
+        <AuthContext.Provider value={{ user, login, logout, loading }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
