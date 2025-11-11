@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Añadido useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import Forms from '../../components/templates/Forms';
 import { generarMensaje } from '../../utils/GenerarMensaje';
 import UserService from '../../services/UserService';
+import { useAuth } from '../../context/AuthContext'; // AÑADIDO
 
 const Login = () => {
     const [form, setForm] = useState({ correo: "", contrasena: "" });
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate(); // Añadido
+    const navigate = useNavigate();
+    const { login } = useAuth(); // AÑADIDO: usa el contexto
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,30 +26,37 @@ const Login = () => {
 
         try {
             const response = await UserService.login(form);
-            const { token, nombre, rol } = response.data;
+            const usuario = response.data; // YA ES EL USUARIO COMPLETO
 
-            // GUARDAR EN LOCALSTORAGE
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify({ nombre, rol }));
+            // GUARDA SOLO user (SIN token)
+            localStorage.setItem('user', JSON.stringify({
+                id: usuario.id,
+                nombre: usuario.nombre,
+                rol: usuario.rol
+            }));
 
-            // MENSAJE DE BIENVENIDA
-            generarMensaje(`¡Bienvenido ${nombre}!`, 'success');
+            // USA EL CONTEXTO
+            login({
+                id: usuario.id,
+                nombre: usuario.nombre,
+                rol: usuario.rol
+            });
 
-            // REDIRECCIÓN SEGÚN ROL
+            generarMensaje(`¡Bienvenido ${usuario.nombre}!`, 'success');
+
             setTimeout(() => {
-                if (rol.id === 1 || rol.id === 2) {
+                if (usuario.rol.id === 1 || usuario.rol.id === 2) {
                     navigate('/admin/dashboard');
-                } else if (rol.id === 5) {
-                    navigate('/'); // o '/dashboard' si tienes uno
+                } else {
+                    navigate('/');
                 }
             }, 1500);
 
         } catch (error) {
-            const msg = error.response?.data?.message || 'Error al iniciar sesión';
+            const msg = error.response?.data || 'Credenciales inválidas';
             generarMensaje(msg, 'error');
         } finally {
             setLoading(false);
-            // Opcional: limpiar formulario
             setForm({ correo: "", contrasena: "" });
         }
     };
