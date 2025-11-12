@@ -1,40 +1,38 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import {publicLinks} from './data/navbarPublicLinks';
-import {adminLinks} from './data/navbarAdminLinks';
-
+import { Suspense } from 'react';
+import { publicLinks } from './data/navbarPublicLinks';
+import { adminLinks } from './data/navbarAdminLinks';
 import Navbar from './components/organisms/Navbar';
-
-// Páginas
-import Home from './pages/user/Home';
-import Login from './pages/auth/login';
-import CreateUser from './pages/auth/create-user';
-import HomeAdmin from './pages/admin/HomeAdmin';
+import { appRoutes } from './routes/config';
 
 function Layout() {
   const location = useLocation();
 
-  // Rutas donde NO se muestra el NavbarPublic
-  const hideNavbarRoutes = ['/login', '/create-user'];
-
   const isAdminRoute = location.pathname.startsWith('/admin');
-  const shouldShowNavbarPublic = !isAdminRoute && !hideNavbarRoutes.includes(location.pathname);
+  const currentRoute = appRoutes.find(route => route.path === location.pathname);
+  const showNavbar = isAdminRoute || currentRoute?.showNavbar;
+
+  const navbarLinks = isAdminRoute ? adminLinks : publicLinks;
+  const navbarTitle = isAdminRoute ? 'Admin Naves Front' : 'Naves Front';
 
   return (
     <>
-      {isAdminRoute ? (
-        <Navbar links={adminLinks} title="Admin Naves Front"/>
-      ) : (
-        shouldShowNavbarPublic && <Navbar links={publicLinks}  title="Naves Front"/>
-      )}
+      {showNavbar && <Navbar links={navbarLinks} title={navbarTitle} />}
 
       <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/create-user" element={<CreateUser />} />
-          <Route path="/admin/dashboard" element={<HomeAdmin />} />
-          <Route path="*" element={<div>404 - Página no encontrada</div>} />
-        </Routes>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-600"></div>
+            </div>
+          }
+        >
+          <Routes>
+            {appRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
+          </Routes>
+        </Suspense>
       </main>
     </>
   );
