@@ -1,7 +1,7 @@
 import React from "react";
 import DynamicTexts from "../molecules/DynamicTexts";
 import Image from "../atoms/Image";
-import CardsDisplay from "../organims/CardsDisplay";
+import CardsDisplay from "../organisms/CardsDisplay";
 import DynamicTable from "../molecules/DynamicTable";
 
 function Section({ content = [], className = "p-4" }) {
