@@ -40,3 +40,15 @@ algo que se nota al seguir agregando páginas es que justamente se va haciendo m
 se hico la carpeta routes dentro del src, esta contiene el config.jsx dentro de ese archivo está todo explicado para que sea más simple el hacer el cambio,
 además de que el mismo archivo App.jsx está ya listo para este dinamismo, si no se sienten cómodos haciendo eso, está bien, no tienen que hacer ese cambio, pero
 en caso de estresarse viendo tanto código, pueden hacerlo, este es un cambio opcional la verdad
+
+##tablas dinámicas
+se agregaron tablas dinámicas, estas permiten llegar y llenarse, así solo ponen los datos, la manera de hacerlo es así
+
+{
+  type: "table",
+  title: "Usuarios",
+  columns: ["ID", "Nombre", "Edad"],
+  data: [[1, "Juan", 28], [2, "Ana", 34]]
+}
+
+esto tomando en cuenta el template "Section.jsx" una manera rápida y simple de hacer tablas
