@@ -13,6 +13,20 @@ class FaccionesService {
             throw error;
         }
     }
+
+    async createFaccion(faccionData) {
+        try {
+            const response = await axios.post(BASE_URL, faccionData, {
+                headers: {
+                'Content-Type': 'application/json',
+                },
+            });
+            return response.data;
+        } catch (error) {
+            console.error('Error al crear facción:', error.response?.data || error.message);
+            throw error;
+        }
+    }
 }
 
 export default new FaccionesService();

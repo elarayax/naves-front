@@ -52,3 +52,8 @@ se agregaron tablas dinámicas, estas permiten llegar y llenarse, así solo pone
 }
 
 esto tomando en cuenta el template "Section.jsx" una manera rápida y simple de hacer tablas
+
+##popup dinámico
+en este caso por comodida, generé un pop-up dinámico, así en vez de hacer páginas para crear o editar, solo se presiona el crear se abre y listo
+se actualizó el input de átomo para que se pueda hacer, añadiendo los textarea, en esta versión no está lo de subir las imagenes a la api externa, pero
+en el próximo cambio si estará, así que tocara esperar un poco para eso
