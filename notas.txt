@@ -74,4 +74,19 @@ npm install react-image-file-resizer
 (dentro de la carpeta del proyecto)
 
 generé un archivo llamado UploadImage.js dentro de utils, ahí está todo el tejemaneje de como se usa, el create modal, se actualizó
-para ahora aceptar input de imagen, igual que se creó el átomo InputFile que nos servirá
+para ahora aceptar input de imagen, igual que se creó el átomo InputFile que nos servirá para lo que quieran.
+
+ahora el proyecto hace lo siguiente:
+
+- comprime la imagen y al transforma a webp
+- la envía con un post a imgbb y recibe la ruta de esta
+- esta ruta la guarda en la base de datos
+
+esto hace que nuestro proyecto no dependa de espacio en el servidor ni nada, optimizando recursos
+
+## se agrega el editar y eliminar
+algo más que necesario en cualquier administrador, es justamente el editar y eliminar, en este caso
+se actualizó nuestro create modal para permitir el poder llenarlo con los datos del objeto y así 
+editarlo, en cuanto al eliminar aparece un boton que pregunta si deseamos eliminar o no, ahora falta terminar los otros crud
+y la vista de usuario, pero con lo avanzado ahora, la verdad que es lo de menos, seguiré actualizando por que me gusta star wars
+y creo que es una buena guía para ustedes, que la fuerza los acompañe siempre <3
