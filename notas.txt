@@ -57,3 +57,20 @@ esto tomando en cuenta el template "Section.jsx" una manera rápida y simple de 
 en este caso por comodida, generé un pop-up dinámico, así en vez de hacer páginas para crear o editar, solo se presiona el crear se abre y listo
 se actualizó el input de átomo para que se pueda hacer, añadiendo los textarea, en esta versión no está lo de subir las imagenes a la api externa, pero
 en el próximo cambio si estará, así que tocara esperar un poco para eso
+
+##subir imagenes 
+para esto vamos a usar imagebb https://imgbb.com/ se crean una cuenta y luego van a este enlace 
+https://api.imgbb.com/ que nos ayudará a generar nuestro key para poder enviar imágenes a esta api, este valor lo podemos dejar plano
+en nuestro proyecto o para agregar una capa de protección vamos a guardarlo como variable de entorno en vercel, para hacerlo vamos a ir a 
+nuestro proyecto y en setting, seleccionamos Environments y ahí Add Environment Variable, en mi caso la agregué como VITE_IMGBB_API_KEY que es el 
+valor que verán en el proyecto, recordar que para subir imagenes se usa la url
+
+https://api.imgbb.com/1/upload
+
+ahora vamos a añadir una dependencia a nuestro proyecto que se llama react-image-file-resizer, para añadirla vamos a escribir en la terminal
+
+npm install react-image-file-resizer 
+
+(dentro de la carpeta del proyecto)
+
+generé un archivo llamado UploadImage.js dentro de utils, ahí está todo el tejemaneje de como se usa

@@ -8,9 +8,9 @@ import FaccionesService from '../../../services/FaccionesService';
 import { generarMensaje } from '../../../utils/GenerarMensaje';
 
 const createInputs = [
-    { name: "nombre", type: "text", placeholder: "Nombre de la facción", required: true },
-    { name: "descripcion", type: "textarea", placeholder: "Descripción detallada", required: true, className: "h-28" },
-    { name: "logo", type: "url", placeholder: "https://ejemplo.com/logo.png", required: true },
+  { name: "nombre", type: "text", placeholder: "Nombre", required: true },
+  { name: "descripcion", type: "textarea", placeholder: "Descripción", required: true, className: "h-28" },
+  { name: "logo", type: "file" },
 ];
 
 function Home() {
