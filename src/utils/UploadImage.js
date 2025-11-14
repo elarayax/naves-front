@@ -1,4 +1,3 @@
-// src/utils/uploadToImgBB.js
 import Resizer from 'react-image-file-resizer';
 
 const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY
