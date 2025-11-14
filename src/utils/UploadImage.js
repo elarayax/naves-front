@@ -2,7 +2,7 @@ import Resizer from 'react-image-file-resizer';
 
 const IMGBB_API_KEY = import.meta.env.VITE_IMGBB_API_KEY
 
-export const uploadToImgBB = async (file) => {
+export const UploadToImgBB = async (file) => {
     return new Promise((resolve, reject) => {
         Resizer.imageFileResizer(
             file,

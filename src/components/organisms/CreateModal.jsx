@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import DynamicInputs from '../molecules/DynamicInput';
 import Button from '../atoms/Button';
 import InputFile from '../atoms/InputFile';
-import uploadToImgBB from '../../utils/UploadImage';
+import { uploadToImgBB } from '../../utils/uploadImage';
 
 function CreateModal({ isOpen, onClose, onSubmit, inputsConfig = [], title = "Crear nuevo", submitText = "Guardar", loading = false,}) {
     const [formData, setFormData] = useState({});
