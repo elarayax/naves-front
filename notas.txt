@@ -73,4 +73,5 @@ npm install react-image-file-resizer
 
 (dentro de la carpeta del proyecto)
 
-generé un archivo llamado UploadImage.js dentro de utils, ahí está todo el tejemaneje de como se usa
+generé un archivo llamado UploadImage.js dentro de utils, ahí está todo el tejemaneje de como se usa, el create modal, se actualizó
+para ahora aceptar input de imagen, igual que se creó el átomo InputFile que nos servirá

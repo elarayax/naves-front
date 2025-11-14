@@ -18,6 +18,7 @@ function Home() {
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [submitLoading, setSubmitLoading] = useState(false);
+    const [editingFaccion, setEditingFaccion] = useState(null);
  
     useEffect(() => {
         const loadData = async () => {
@@ -28,7 +29,12 @@ function Home() {
                 try {
                     setLoading(true);
                     const data = await FaccionesService.getAllFacciones();
-                    tableItem.data = data;
+                    const dataWithActions = data.map(faccion => ({
+                        ...faccion,
+                        onEdit: () => handleOpenEdit(faccion),
+                        onDelete: () => handleDelete(faccion.id),
+                    }));
+                    tableItem.data = dataWithActions;
                 } catch (error) {
                     generarMensaje('No se pudieron cargar las facciones', 'warning');
                     tableItem.data = [{ id: "Error", nombre: "No se pudieron cargar", descripcion: "Revisa tu conexión" }];
@@ -42,22 +48,62 @@ function Home() {
         loadData();
     }, []);
 
+    const handleOpenEdit = (faccion) => {
+        setEditingFaccion(faccion);
+        setIsModalOpen(true);
+    };
+
     const handleCreate = async (formData) => {
         setSubmitLoading(true);
         try {
-            await FaccionesService.createFaccion(formData);
+            if (editingFaccion) {
+                await FaccionesService.updateFaccion(editingFaccion.id, formData);
+                generarMensaje('¡Facción actualizada con éxito!', 'success');
+            } else {
+                await FaccionesService.createFaccion(formData);
+                generarMensaje('¡Facción creada con éxito!', 'success');
+            }
             const data = await FaccionesService.getAllFacciones();
+            const dataWithActions = data.map(faccion => ({
+                ...faccion,
+                onEdit: () => handleOpenEdit(faccion),
+                onDelete: () => handleDelete(faccion.id),
+            }));
+
             const updatedData = [...pageData];
             const tableItem = updatedData.find(i => i.service === "facciones");
-            tableItem.data = data;
+            tableItem.data = dataWithActions;
             setPageData(updatedData);
+
             setIsModalOpen(false);
-            generarMensaje('¡Facción creada con éxito!', 'success');
+            setEditingFaccion(null);
         } catch (error) {
-            console.error("Error al crear:", error);
-            generarMensaje('Error al crear la facción', 'warning');
+            generarMensaje('Error al guardar la facción', 'warning');
         } finally {
             setSubmitLoading(false);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (!confirm('¿Estás seguro de eliminar esta facción?')) return;
+
+        try {
+            await FaccionesService.deleteFaccion(id);
+            generarMensaje('¡Facción eliminada con éxito!', 'success');
+
+            const data = await FaccionesService.getAllFacciones();
+            const dataWithActions = data.map(faccion => ({
+                ...faccion,
+                onEdit: () => handleOpenEdit(faccion),
+                onDelete: () => handleDelete(faccion.id),
+            }));
+
+            const updatedData = [...pageData];
+            const tableItem = updatedData.find(i => i.service === "facciones");
+            tableItem.data = dataWithActions;
+            setPageData(updatedData);
+        } catch (error) {
+            generarMensaje('Error al eliminar la facción', 'warning');
         }
     };
 
@@ -82,12 +128,16 @@ function Home() {
 
             <CreateModal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                onClose={() => {
+                setIsModalOpen(false);
+                setEditingFaccion(null);
+                }}
                 onSubmit={handleCreate}
                 inputsConfig={createInputs}
-                title="Crear Nueva Facción"
-                submitText="Crear"
+                title={editingFaccion ? "Editar Facción" : "Crear Nueva Facción"}
+                submitText={editingFaccion ? "Actualizar" : "Crear"}
                 loading={submitLoading}
+                initialData={editingFaccion || {}}
             />
         </div>
     );

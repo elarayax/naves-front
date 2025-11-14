@@ -10,7 +10,7 @@ export const homeData = [
     {
         type: "table",
         title: "Facciones Activas",
-        columns: ["ID", "Nombre", "descripcion", "logo"],
+        columns: ["ID", "Nombre", "descripcion", "logo", "Acciones"],
         data: [], 
         service: "facciones",
         className: "my-8",

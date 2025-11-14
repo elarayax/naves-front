@@ -5,21 +5,25 @@ import Button from '../atoms/Button';
 import InputFile from '../atoms/InputFile';
 import { uploadToImgBB } from '../../utils/uploadImage';
 
-function CreateModal({ isOpen, onClose, onSubmit, inputsConfig = [], title = "Crear nuevo", submitText = "Guardar", loading = false,}) {
-    const [formData, setFormData] = useState({});
+function CreateModal({ isOpen, onClose, onSubmit, inputsConfig = [], title = "Crear nuevo", submitText = "Guardar", loading = false, initialData = {},}) {
+    const [formData, setFormData] = useState(initialData);
     const [imagePreview, setImagePreview] = useState(null);
     const [uploadingImage, setUploadingImage] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
-            const initial = {};
-            inputsConfig.forEach((input) => {
-                initial[input.name] = input.value || '';
-            });
+            const initial = initialData && Object.keys(initialData).length > 0 ? { ...initialData } : {};
+
+            if (!initialData || Object.keys(initialData).length === 0) {
+                inputsConfig.forEach((input) => {
+                    initial[input.name] = input.value || '';
+                });
+            }
+
             setFormData(initial);
-            setImagePreview(null);
+            setImagePreview(initialData?.logo || null);
         }
-    }, [isOpen, inputsConfig]);
+    }, [isOpen, inputsConfig, initialData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

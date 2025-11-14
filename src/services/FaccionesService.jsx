@@ -27,6 +27,26 @@ class FaccionesService {
             throw error;
         }
     }
+
+    async updateFaccion(id, data) {
+        try {
+            const response = await axios.patch(`${BASE_URL}/${id}`, data);
+            return response.data;
+        } catch (error) {
+            console.error('Error al actualizar facción:', error);
+            throw error;
+        }
+    }
+
+    async deleteFaccion(id) {
+        try {
+            await axios.delete(`${BASE_URL}/${id}`);
+            return true;
+        } catch (error) {
+            console.error('Error al eliminar facción:', error);
+            throw error;
+        }
+    }
 }
 
 export default new FaccionesService();

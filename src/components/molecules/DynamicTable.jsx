@@ -15,7 +15,7 @@ function DynamicTable({ columns = [], data = [], className = '', striped = true,
 
     const isImageUrl = (str) => {
         if (!str || typeof str !== 'string') return false;
-        return str.startsWith('http') || str.startsWith('/') || str.includes('.png') || str.includes('.jpg') || str.includes('.jpeg') || str.includes('.svg' || str.includes('.gif') || str.includes('.webp'));
+        return str.startsWith('http') || str.startsWith('/') || str.includes('.png') || str.includes('.jpg') || str.includes('.jpeg') || str.includes('.svg') || str.includes('.gif') || str.includes('.webp');
     };
 
     return (
@@ -43,6 +43,19 @@ function DynamicTable({ columns = [], data = [], className = '', striped = true,
                                 {cells.map((cell, cellIndex) => {
                                     const header = columns[cellIndex];
                                     const headerLower = header.toLowerCase();
+
+                                    if (headerLower === 'acciones') {
+                                        return (
+                                            <td key={cellIndex} className="px-4 py-3 text-sm">
+                                                <div className="flex gap-2">
+                                                    <Button text="Editar" onClick={() => row.onEdit?.(row)}
+                                                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 text-xs rounded-md font-medium active:scale-95 transition-all" />
+                                                    <Button text="Eliminar" onClick={() => row.onDelete?.(row.id)}
+                                                        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 text-xs rounded-md font-medium active:scale-95 transition-all" />
+                                                </div>
+                                            </td>
+                                        );
+                                    }
 
                                     const isImageColumn = headerLower.includes('logo') ||
                                         headerLower.includes('imagen') ||
