@@ -1,6 +1,7 @@
 // src/components/molecules/DynamicTable.jsx
 import React from 'react';
 import Image from '../atoms/Image';
+import Button from '../atoms/Button';
 
 function DynamicTable({ columns = [], data = [], className = '', striped = true, hover = true, emptyMessage = 'No hay datos disponibles', }) {
     if (!data || data.length === 0) {
